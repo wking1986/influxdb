@@ -704,15 +704,6 @@ func isAuthorizationError(err error) bool {
 	return ok
 }
 
-func isMeasurementNotFoundError(err error) bool {
-	s := err.Error()
-	return strings.HasPrefix(s, "measurement") && strings.HasSuffix(s, "not found") || strings.Contains(s, "measurement not found")
-}
-
-func isFieldNotFoundError(err error) bool {
-	return (strings.HasPrefix(err.Error(), "field not found"))
-}
-
 // httpError writes an error to the client in a standard format.
 func httpError(w http.ResponseWriter, error string, pretty bool, code int) {
 	w.Header().Add("content-type", "application/json")
