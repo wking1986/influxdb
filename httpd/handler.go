@@ -52,8 +52,9 @@ type Handler struct {
 	requireAuthentication bool
 	version               string
 
-	Logger     *log.Logger
-	WriteTrace bool // Detailed logging of write path
+	Logger            *log.Logger
+	HTTPAccessLogging bool // Log every HTTP access.
+	WriteTrace        bool // Detailed logging of write path
 }
 
 // NewClusterHandler is the http handler for cluster communcation endpoints
@@ -163,7 +164,7 @@ func (h *Handler) SetRoutes(routes []route) {
 		handler = versionHeader(handler, h.version)
 		handler = cors(handler)
 		handler = requestID(handler)
-		if r.log {
+		if h.HTTPAccessLogging && r.log {
 			handler = logging(handler, r.name, h.Logger)
 		}
 		handler = recovery(handler, r.name, h.Logger) // make sure recovery is always last

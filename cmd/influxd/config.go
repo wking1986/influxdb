@@ -175,6 +175,7 @@ type Config struct {
 	Snapshot Snapshot `toml:"snapshot"`
 
 	Logging struct {
+		HTTPAccess   bool `toml:"http-access"`
 		WriteTracing bool `toml:"write-tracing"`
 		RaftTracing  bool `toml:"raft-tracing"`
 	} `toml:"logging"`
@@ -238,6 +239,10 @@ func NewConfig() *Config {
 
 	c.Snapshot.BindAddress = DefaultSnapshotBindAddress
 	c.Snapshot.Port = DefaultSnapshotPort
+
+	c.Logging.HTTPAccess = true
+	c.Logging.WriteTracing = false
+	c.Logging.RaftTracing = false
 
 	c.Monitoring.Enabled = false
 	c.Monitoring.WriteInterval = Duration(DefaultStatisticsWriteInterval)

@@ -99,6 +99,7 @@ func (h *Handler) serveMetadata(w http.ResponseWriter, r *http.Request) {
 	if h.Server != nil {
 		sh := httpd.NewClusterHandler(h.Server, h.Config.Authentication.Enabled, version)
 		sh.WriteTrace = h.Config.Logging.WriteTracing
+		sh.HTTPAccessLogging = h.Config.Logging.HTTPAccess
 		sh.ServeHTTP(w, r)
 		return
 	}
