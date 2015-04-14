@@ -189,9 +189,14 @@ func (b *Broker) Open(path string) error {
 		go func() {
 			b.wg.Add(1)
 			tick := time.NewTicker(b.TruncationInterval)
+			defer tick.Stop()
 			for {
-				<-tick.C
-				b.TruncateTopics()
+				select {
+				case <-tick.C:
+					b.TruncateTopics()
+				case <-b.done:
+					return
+				}
 			}
 		}()
 
@@ -273,7 +278,7 @@ func (b *Broker) closeTopics() {
 
 // truncateTopics forces topics to truncate such that they are equal to
 // or less than the requested size, if possible.
-func (b *Broker) TruncateTopics() error {
+func (b *Broker) TruncateTopics() {
 	for _, t := range b.topics {
 		if n, err := t.Truncate(b.MaxTopicSize); err != nil {
 			b.Logger.Printf("error truncating topic %s: %s", t.Path(), err.Error())
@@ -281,7 +286,7 @@ func (b *Broker) TruncateTopics() error {
 			b.Logger.Printf("topic %s, %d bytes deleted", t.Path(), n)
 		}
 	}
-	return nil
+	return
 }
 
 // SetMaxIndex sets the highest index applied by the broker.

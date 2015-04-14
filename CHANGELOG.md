@@ -1,3 +1,8 @@
+## v0.9.0-rc24 [unreleased]
+
+## Features
+- [#2276](https://github.com/influxdb/influxdb/pull/2276): Basic size-based broker truncation.
+
 ## v0.9.0-rc24 [2015-04-13]
 
 ### Bugfixes
